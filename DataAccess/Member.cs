@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 namespace DataAccess
 {
@@ -11,6 +13,9 @@ namespace DataAccess
         }
 
         public int MemberId { get; set; }
+        [Required(ErrorMessage = "The email address is required")]
+        [EmailAddress(ErrorMessage = "Invalid Email Address")]
+        [Display(Name = "Email")]
         public string Email { get; set; } = null!;
         public string CompanyName { get; set; } = null!;
         public string City { get; set; } = null!;

@@ -2,6 +2,7 @@
 using DataAccess.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace eStore.Controllers
 {
@@ -10,13 +11,18 @@ namespace eStore.Controllers
         IProductRepository? productRepository = null;
         public ProductController() => productRepository = new ProductRepository();
         // GET: ProductController
-        public ActionResult Index()
+        public IActionResult Index(string id)
         {
             if (productRepository == null)
             {
                 return View();
             }
-            var products = productRepository.GetListProduct();
+            var products = from p in productRepository.GetListProduct()
+                           select p;
+            if (!string.IsNullOrEmpty(id))
+            {
+                products = products.Where(pro => pro.ProductName!.ToUpper().Contains(id.ToUpper()) || pro.UnitPrice!.ToString().Contains(id)).ToList();
+            }
             return View(products);
         }
 
@@ -40,7 +46,24 @@ namespace eStore.Controllers
         }
 
         // GET: ProductController/Create
-        public ActionResult Create() => View();
+        public ActionResult Create()
+        {
+            int id = 0;
+            if (productRepository != null)
+            {
+                id = productRepository.GetListProduct().Count() + 1;
+
+                while (productRepository.GetProductById(id) != null)
+                {
+                    id++;
+                }
+
+                var categories = new SelectList(productRepository.GetListProduct().Select(cate => cate.CategoryId).Distinct().ToList(), "CategoryId");
+                ViewBag.CategoryId = categories;
+            }
+            ViewBag.ProductId = id;
+            return View();
+        }
 
         // POST: ProductController/Create
         [HttpPost]

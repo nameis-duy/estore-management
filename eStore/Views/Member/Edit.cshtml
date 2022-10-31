@@ -47,7 +47,16 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+@{
+    if ("Admin".Equals(TempData["Role"] as string))
+    {
+        <a asp-action="Index">Back to List</a>
+    }
+    if ("User".Equals(TempData["Role"] as string))
+    {
+        <a asp-action="Details" asp-route-id="@Model?.MemberId">Back to List</a>
+    }
+}
 </div>
 
 @section Scripts {

@@ -25,7 +25,7 @@ namespace eStore.Controllers
             else if (member.Email.Contains("admin"))
             {
                 TempData["Role"] = "Admin";
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index","Product");
             }
             else
             {

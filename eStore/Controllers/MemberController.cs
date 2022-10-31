@@ -41,7 +41,20 @@ namespace eStore.Controllers
         }
 
         // GET: MemberController/Create
-        public ActionResult Create() => View();
+        public ActionResult Create()
+        {
+            int id = 0;
+            if (memberRepository != null)
+            {
+                id = memberRepository.GetMemberList().Count();
+                while (memberRepository.GetMemberById(id) != null)
+                {
+                    id++;
+                }
+            }
+            ViewBag.MemberId = id;
+            return View();
+        }
 
         // POST: MemberController/Create
         [HttpPost]
@@ -99,6 +112,10 @@ namespace eStore.Controllers
                     {
                         memberRepository.UpdateMember(member);
                     }
+                }
+                if ("User".Equals(TempData["Role"] as string))
+                {
+                    return RedirectToAction("Details", "Member", new { @id = member.MemberId });
                 }
                 return RedirectToAction(nameof(Index));
             }

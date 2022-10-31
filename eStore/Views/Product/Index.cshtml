@@ -10,6 +10,16 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<form asp-controller="Product" asp-action="Index" method="get" class="d-inline-block">
+    <p class="d-inline-block">
+        Search: <input type="text" name="id" placeholder="Enter product name or unit price"/>
+        <input type="submit" value="Search" />
+    </p>
+</form>
+    
+<a class="text-decoration-none text-dark float-md-end" asp-action="Index" asp-route-id="">Clear</a>
+
 <table class="table">
     <thead>
         <tr>
